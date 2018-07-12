@@ -1,0 +1,55 @@
+```ruby
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+  net = "192.168.112"
+  config.vm.define "proxy" do |config1|
+        config1.vm.provider :libvirt do |vb|
+                vb.memory = "1024"
+                vb.cpus = 1
+                vb.driver = "kvm"
+        end
+	config1.vm.hostname = 'proxy'
+        config1.vm.network "private_network", ip: "10.143.20.2"
+        config1.vm.provision "shell", path: "proxy.sh"
+  end
+
+  config.vm.box = "centos/7"
+  net = "192.168.112"
+  config.vm.define "web" do |config1|
+                config1.vm.provider :libvirt do |vb|
+                        vb.memory = "1024"
+                        vb.cpus = 1
+                        vb.driver = "kvm"
+                end
+                config1.vm.hostname = 'web'
+                config1.vm.network "private_network", ip: "10.143.20.3"
+          end
+
+   config.vm.box = "centos/7"
+   net = "192.168.112"
+   config.vm.define "db" do |config1|
+                config1.vm.provider :libvirt do |vb|
+                        vb.memory = "1024"
+                        vb.cpus = 1
+                        vb.driver = "kvm"
+                end
+                config1.vm.hostname = 'db'
+                config1.vm.network "private_network", ip: "10.143.20.4"
+                config1.vm.provision "shell", path: "db.sh"
+          end
+
+   config.vm.box = "centos/7"
+   net = "192.168.112"
+   config.vm.define "monitor" do |config1|
+                config1.vm.provider :libvirt do |vb|
+                        vb.memory = "1024"
+                        vb.cpus = 1
+                        vb.driver = "kvm"
+                end
+
+                config1.vm.hostname = 'monitor'
+                config1.vm.network "private_network", ip: "10.143.20.5"
+                config1.vm.provision "shell", path: "monitor.sh"
+          end
+
+```

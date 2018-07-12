@@ -1,0 +1,24 @@
+Trebuie sa configuram firewall-ul din CentOS (firewalld).
+
+Pentru configul de firewall vrem sa avem o zona custom, o vom numi “yonder”.
+
+By default zona va avea allow pentru serviciul de ssh, dhcp si snmp pe toate cele 4 VM-uri.
+
+Pe celelalte masini vom adauga urmatoarele reguli in zona yonder:
+
+Proxy: Serviciul http si https (si vom fi nevoiti sa adaugam si serviciul custom pentru portul TCP/1313 folosit de hugo).
+
+Web:
+
+Serviciu custom pentru portul TCP/18080 (portul folosit de go-interns)
+
+Serviciul http si https.
+
+DB: Servciu pentru portul TCP/5432 (portul folosit de postgresql)
+
+Monitori: Serviciul http, https
+
+Pentru referinta va las documentatia oficiala de la firewalld: https://firewalld.org/documentation/
+
+Also check: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
+

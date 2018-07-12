@@ -1,0 +1,32 @@
+POSTGRESQL Configure
+
+Am instalat automat pe masina virtuala nr. 4 POSTGRESQL, acum e timpul sa configuram.
+
+Daca nu am instalat deja:
+
+sudo yum install postgresql-server postgresql-contrib -y
+Inainte de a utiliza programul:
+
+sudo postgresql-setup initdb
+By default, in PostgreSQL nu putem folosi password authentication. Vom schimba acest lucru modificand configurarea HBA (host-based authentication configuration)
+
+sudo nano /var/lib/pgsql/data/pg_hba.conf
+
+Gasim liniile care arata astfel:
+
+host all all 127.0.0.1 /32 ident
+
+host all all ::1 /128 ident
+
+Inlocuim “ident” cu “md5”:
+
+host all all 127.0.0.1 /32 md5
+
+host all all ::1 /128 md5
+
+Salvam si iesim. Acum avem voie sa folosim password authentication.
+
+Urmeaza sa dam start si enable la PostgreSQL:
+
+sudo systemctl start postgresql
+sudo systemctl enable postgresql

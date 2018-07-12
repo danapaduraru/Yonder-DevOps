@@ -1,0 +1,29 @@
+```
+#HTTPS
+#Vom genera un certificat HTTPS selfsigned pentru IPul VM1 Proxy exter.
+
+sudo mkdir /etc/ssl/private
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-$
+#Mai multe informatii gasim pe site-ul: https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-on-centos-7
+
+#Vom edita configul pentru a putea folosi HTTPS:
+
+#Settings for a TLS enabled server.
+
+    server {
+	listen       443 ssl http2 default_server;
+        listen       [::]:443 ssl http2 default_server;
+        server_name  https_server;
+        root         /usr/share/nginx/html;
+
+        ssl_certificate "/etc/ssl/certs/nginx-selfsigned.crt";
+        ssl_certificate_key "/etc/ssl/private/nginx-selfsigned.key";
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+Reverse Proxy
+
+return 301 https://$host$request_uri/;
+#Un reverse proxy este un tip de server proxy care preia resurse drept client de la unul sau mai multe servere. 
+#Resursele sunt returnate clientului ca si cum ar fi apartinut serverului web.
+```

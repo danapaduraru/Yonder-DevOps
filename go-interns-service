@@ -1,0 +1,51 @@
+Cream un serviciu de systemd pe web care sa fie folosit pentru oprirea si pornirea aplicatiei go-interns.
+
+Info: https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+```
+cd /etc/systemd/system
+touch /etc/systemd/system/go-interns.service
+chmod 664 /etc/systemd/system/go-interns.service
+nano go-interns.service
+#go-interns.service
+[Unit]
+Description = Go-Interns Start & Stop Application
+After = network.target
+
+[Service]
+ExecStart = /home/vagrant/go-interns/main
+KillMode = process
+WorkingDirectory = /home/vagrant/go-interns
+StandardOutput =syslog
+StandardError =syslog
+SyslogIdentifier =internslog
+
+[Install]
+WantedBy = multi-user.target
+```
+Verificam daca am modificat ok serviciul:
+```
+systemctl daemon-reload
+systemctl start go-interns
+systemctl status go-interns
+```
+Dorim ca log-ul sa se salveze intr-un log file:
+```
+cd /etc/rsyslog.d/
+touch internslog.conf
+nano internslog.conf
+#internslog.conf
+if $programname == internslog then /var/log/internslog.log
+if $programname == internslog then ~
+```
+Pentru a ne asigura ca functioneaza:
+```
+getenforce 
+setenforce 0
+```
+Verificam:
+```
+journalctl -u rsyslog
+journalctl -u go-interns
+systemctl restart go-interns
+systemctl restart rsyslog
+```

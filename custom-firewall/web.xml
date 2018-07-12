@@ -1,0 +1,21 @@
+cd /etc/firewalld/zones
+cp public.xml yonder.xml
+nano yonder.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Yonder</short>
+  <description>For us only.</description>
+  <service name="ssh"/>
+  <service name="http"/>
+  <service name="https"/>
+  <port protocol="tcp" port="18080"/>
+  <service name="dhcpv6-client"/>
+</zone>
+```
+
+systemctl enable firewalld
+systemctl start firewalld
+firwall-cmd --set-default-zone yonder
+firewall-cmd --list-all

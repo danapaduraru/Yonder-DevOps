@@ -1,0 +1,7 @@
+{
+    "DBName": "2018",  
+	"User": "postgres",     
+	"Password": "545426qwe",
+	"Host": "10.143.20.4",     
+	"Port": "5432"
+}

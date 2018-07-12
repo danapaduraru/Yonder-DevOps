@@ -1,0 +1,12 @@
+{{define "success"}}
+{{template "head"}}
+<body>
+<p class="title">
+Salut {{.Name}},
+</p>
+<p class="subtitle">
+    M-am conectat la baza de date: {{.PostgresName}}, versiunea {{.PostgresVersion}}.
+</p>
+</body>
+</html>
+{{end}}

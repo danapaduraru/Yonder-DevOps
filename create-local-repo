@@ -1,0 +1,41 @@
+Vom crea un repository local pe laptopul nostru.
+
+Ce este un repository in Linux: https://en.wikipedia.org/wiki/Software_repository Un exemplu pentru un repo ce contine pachetele oficiale pentru Centos: https://www.server-world.info/en/note?os=CentOS_7&p=localreru
+
+Repository-ul va contine pachetul facut luni pentru aplicatia web. Repository-ul trebuie sa fie expus prin http sau ftp dupa preferinta. Dupa asta il veti adauga pe masina de web si veti confirma ca puteti instala pachetul.
+
+Configure Local Yum Repository Server
+
+Vom crea un folder pentru repo cu calea: /srv/www/repos/myrepo
+
+Si cand suntem in repos, scriem comanda:
+
+createrepo myrepo
+In folderul myrepo vom pune RPM-ul nostru. L-am pus pe git si dupa aceea am clonat pe laptop, copiindu-l in myrepo.
+
+Vom folosi nginx pentru a accesa localhost/repos
+
+Instalare nginx
+
+yum install -y epel-release
+yum -y install nginx
+Pornire nginx
+
+systemctl start nginx
+systemctl enable nginx
+Editam nginx.conf
+
+nano /etc/nginx/nginx.conf
+Facem o noua locatie unde vom pune adresa repo-ului nostru
+
+location /repo {
+      root /srv/www/;
+      autoindex on;
+Dupa aceea, vom activa nginx
+
+systemctl start nginx
+systemctl enable nginx
+Verificam daca merge bine
+
+systemctl status nginx
+Si intram pe site: localhost/repos.

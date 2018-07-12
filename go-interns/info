@@ -1,0 +1,25 @@
+Trebuie sa instalam aplicatia go-interns pe server-ul web si sa configuram un reverse proxy in nginx.
+
+Primul lucru pe care trebuie sa il facem e sa clonam codul aplicatiei go-interns de aici: https://github.com/aso930/go-interns.git
+
+Dupa vom face build la aplicatie folosind scriptul build.sh.
+
+cd go-interns
+chmod 777 build.sh
+sudo yum install dos2unix 
+dos2unix build.sh
+./build.sh
+Dupa ce aplicatia a fost compilata trebuie sa o configuram folosing conf.json.
+
+Aici trebuie specificate datele de conectare la baza de date postgresql.
+
+{
+    "DBName": "2018",
+        "User": "postgres",
+        "Password": "545426qwe",
+        "Host": "10.143.20.4",
+        "Port": "5432"
+}
+Daca am confirmat ca aplicatia porneste si functioneaza accesand linkul: http://web:18080, vom trece la configurarea unui reverse proxy folosind nginx. Endpoint-ul ce va fi accesat va fi https://proxy/go-interns, care va actiona ca reverse proxy pentru http://web:18080/
+
+Ca sa intelegeti ce este un reverse proxy va recomand urmatoarele articole: https://en.wikipedia.org/wiki/Reverse_proxy https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/

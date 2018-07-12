@@ -1,0 +1,38 @@
+Pentru PROXY:
+
+Vom intra in folderul /etc/firewalld/zones
+
+Vom lua ca exemplu fisierul public.xml si vom crea propriul nostru fisier custom.
+
+cp public.xml yonder.xml
+nano yonder.xml
+In yonder.xml, vom adauga serviciile pe care le dorim. Va arata astfel:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Yonder</short>
+  <description>For us only.</description>
+  <service name="ssh"/>
+  <service name="snmp"/>
+  <service name="dhcp"/>
+  <service name="http"/>
+  <service name="https"/>
+</zone>
+```
+Salvam, dupa:
+
+systemctl enable firewalld
+systemctl start firewalld
+firwall-cmd --set-default-zone yonder
+
+Pentru a vedea toate zonele:
+
+firewall-cmd --get-active-zones
+Si pentru a vedea daca zona noastra este cea activa:
+
+firewall-cmd --list-all
+Vom vedea ca acum site-ul nostru de pe portul 1313 nu mai functioneaza. Pentru a rezolva, folosim comanda:
+
+firewall-cmd --permanent --add-port 1313/http
+systemctl restart firewalld

@@ -1,0 +1,47 @@
+Pentru a crea un site unde sa documentam ce am facut pana acum, vom folosi hugo.
+
+Descarcam de pe http://github.com/gohugoio/hugo/releases arhiva potrivita pentru VM-ul nostru.
+
+Am folosit pentru CENTOS7 hugo_0.43_Linux-64bit.tar.gz.
+
+Daca nu am descarcat direct pe masina virtuala, vom muta acolo arhiva folosind comanda scp -i. Folosim sablonul:
+(sudo) scp -i /home/USER/VAGRANT-FOLDER/.vagrant/machines/MACHINE-NAME/libvirt/private_key ARCHIVE-AND-PATH vagrant@MACHINE-IP:/NEW-LOCATION
+Pentru a afla informatii ca de exemplu private_key-ul, folosim comanda:
+
+vagrant ssh-config
+In cazul nostru:
+
+sudo scp -i /home/dana/vagrant-home-kvm/.vagrant/machines/proxy/libvirt/private_key /home/dana/Downloads/hugo_0.43_Linux-64bit.tar.gz vagrant@192.168.121.180:/home/vagrant
+Vom intra in folderul unde am downloadat arhiva si o vom dezarhiva.
+
+tar -xzvf nume-download
+Vom muta hugo in /bin.
+
+Vom crea noul nostru site:
+
+ hugo new site NUME-SITE
+Ii vom adauga o tema. O lista cu temele disponibile gasim aici: https://themes.gohugo.io/tags/documentation/ Inainte de a instala o tema, asigurati-va ca aveti git instalat. Pentru a instala git:
+
+yum install git
+Ca tema de inceput putem folosi Ananke. Pentru a o instala:
+
+cd NUME-SITE 
+git init;
+git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke;
+Dupa aceea, va trebui sa editam fisierul de configuare config.toml si sa adaugam tema noastra.
+
+echo ‘theme = “ananke”’ >> config.toml
+Urmatorul pas ar fi adaugarea unui continut site-ului nostru prin comanda:
+
+hugo new posts/NUME-POSTARE.md
+Putem edita noul fisier creat cu un editor text.
+
+Vom intra pe site folosind comanda:
+
+hugo server –bind=IP-MACHINE –baseURL=MY-BASE-URL
+In cazul nostru:
+
+hugo server –bind=10.143.20.2 –baseUrl=http://10.143.20.3:1313
+SAU - daca CSS nu apare, folosim -b:
+
+hugo server -bind=10.143.20.2 -b="10.143.20.2"

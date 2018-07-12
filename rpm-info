@@ -1,0 +1,54 @@
+Vom invata cum sa cream un pachet RPM pentru aplicatia go-interns.
+
+despre procesul de creare a unui RPM: https://rpm-packaging-guide.github.io/
+
+Spec file-ul trebuie sa contina minim:
+
+o sectiune build unde va fi rulat build.sh
+
+o sectiune install unde instalam binarul in /opt/go-interns/
+
+Vom crea un fisier go-interns.spec care va arata astfel:
+
+Name: myrpm
+Version: 1
+Release: 1
+Summary: RPM for go-interns app
+License: FIXME
+
+%description
+This is a RPM package for my go-interns application
+
+%prep
+
+%build
+./build.sh
+
+%install
+mkdir -p %{buildroot}/opt/go-interns/templates
+mkdir -p %{buildroot}/etc/systemd/system
+install -m 755 main %{buildroot}/opt/go-interns/
+install -m 755 templates/* %{buildroot}/opt/go-interns/templates/
+install -m 777 conf.json %{buildroot}/opt/go-interns/
+install -m 755 gointerns.service %{buildroot}/etc/systemd/system/
+
+%post
+useradd go-user
+systemctl daemon-reload
+systemctl start gointerns.service
+
+%files
+/opt/go-interns/*
+/etc/systemd/system/gointerns.service
+
+
+%changelog
+Cream directoarele pe care le vom folosi:
+
+rpmdev-setuptree
+Si cream package-ul rpm:
+
+rpmbuild -ba nume.spec
+Mergem in RPMS si instalam rpm-ul:
+
+rpm -ivh myrpm... .rpm

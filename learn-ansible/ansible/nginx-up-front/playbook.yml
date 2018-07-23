@@ -1,0 +1,73 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: no  
+  vars:
+    packages:
+      - nodejs
+      - ruby2.3
+      - nginx
+    apt_keys:
+      - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    apt_repos:
+      - ppa:brightbox/ruby-ng
+      - deb https://deb.nodesource.com/node_5.x xenial main
+  
+  tasks:
+    - name: Install Python
+      raw: test -e /usr/bin/python || (apt -y update && apt  install -y python)
+    - name: ensure apt keys are installed for non-launchpad repos
+      apt_key: 
+        url: "{{ item }}"
+        state: present
+      with_items: "{{apt_keys}}"
+    - name: ensure apt repositories are installed
+      apt_repository: 
+        repo: "{{ item }}"
+        state: present
+      with_items: "{{apt_repos}}"
+
+    - name: ensure apt cache is updated
+      apt:
+        update_cache: yes
+
+    - name: ensure apt packages are installed
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{packages}}" 
+
+    - name: ensure nginx is configured
+      template:
+        src: /home/dana/ansible/nginx-up-front/nginx.conf
+        dest: /etc/nginx/conf.d/app.conf
+        owner: root
+        group: sudo
+        mode: 0644
+
+# ufw allow 80/tcp
+# raw: python /mnt/app.py
+#
+    - name: allow port 80
+      ufw:
+        rule: allow
+        proto: tcp
+        port: 80
+    - name: allow python to be used on webpage
+      raw: python /mnt/app.py
+    - name: ensure nginx has been restarted
+      service:
+        name: nginx
+        state: restarted
+
+    - name: display content of all app. files in dir
+      debug: msg={{lookup('fileglob', '/home/dana/ansible/nginx-up-front/app.*')}}
+
+    - name: ensure app code is on the box in /mnt
+      copy:
+        src: "{{ item }}"
+        dest: "/mnt/"
+        owner: "root"
+        mode: 0600
+      with_fileglob:
+        - "/home/dana/ansible/nginx-up-front/app.*"

@@ -1,0 +1,21 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: no
+ 
+  tasks:
+    - name: Install Python
+      raw: test -e /usr/bin/python || (apt -y update && apt  install -y python)
+
+    - name: ensure local user has a matching account on the host
+      user:
+        state: 'present'
+        name: 'dana'
+        shell: '/bin/bash'
+        home: '/home/dana/'
+        groups: sudo
+
+    - name: ensure local user's public key is on the host
+      authorized_key:
+        user: "dana"
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"

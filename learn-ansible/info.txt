@@ -1,0 +1,2 @@
+Managed to do exercises including nginx up front.
+Full solutions are to be found on the website made with hugo (check hugo folder)
